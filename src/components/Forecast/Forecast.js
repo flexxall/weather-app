@@ -17,19 +17,22 @@ const Forecast = () => {
   }, []);
 
   async function getForecast() {
-    await axios(url)
-      .then((res) => {
-        setData(res.data);
-        console.log(data);
-        // const daily = data.daily.map((day) => {
-        // return(<p key={data.daily.dt}>Day</p>));}
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-        setError(error);
-      });
+    try {
+      const res = await axios(url);
+      // .then((res) => {
+      setData(res.data);
+      console.log(data);
+      // const daily = data.daily.map((day) => {
+      // return(<p key={data.daily.dt}>Day</p>));}
+      // })
+      // .catch((error) => {
+      //   console.error("Error fetching data: ", error);
+      //   setError(error);
+      // });
+    } catch (err) {
+      console.error(err);
+    }
   }
-  if (error) return "Error!";
 
   return (
     <div>
@@ -38,7 +41,11 @@ const Forecast = () => {
       {/* {data.daily.map((day) => {
         return <p key={data.daily.dt}>Day</p>;
       })} */}
-
+      {/* <ul>
+        {data.daily.map((day) => (
+          <li key={data.daily.dt}>Day</li>
+        ))}
+      </ul> */}
       <button onClick={getForecast}>Get Forecast</button>
       <Conditions data={data} />
     </div>
