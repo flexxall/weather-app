@@ -8,7 +8,7 @@ const Forecast = () => {
 
   let lat = 38.984764;
   let lon = -94.677658;
-  let key = "850b5e90b2da89a22d801ce5562cb9d8";
+  let key = "xxxxxxxxxxxxxxxxxxxxxxxx";
   let units = "imperial";
   let url = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${key}`;
 
