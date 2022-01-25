@@ -30,7 +30,7 @@ const Forecast = () => {
           })
         );
       });
-  }, []);
+  }, [url]);
 
   return (
     <>
