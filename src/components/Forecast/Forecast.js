@@ -13,6 +13,7 @@ const Forecast = () => {
   const exclude = "current,minutely,hourly,alerts";
   const units = "imperial";
   const url = `${API_URL}?lat=${lat}&lon=${lon}&exclude=${exclude}&units=${units}&appid=${API_KEY}`;
+  const test = "test";
 
   useEffect(() => {
     fetch(url)
