@@ -1,4 +1,5 @@
 import React from "react";
+
 const Conditions = (props) => {
   const weekday = [
     "Sunday",
@@ -10,18 +11,22 @@ const Conditions = (props) => {
     "Saturday",
   ];
 
-  const d = new Date();
-  let day = weekday[d.getDay()];
-  let { dailyData } = props;
-  console.log("from conditions " + dailyData);
+  const d = new Date(props.weekDay * 1000).getDay();
+  let day = weekday[d];
+
   return (
-    <div>
-      Test
-      {dailyData &&
-        dailyData.map((day) => {
-          return <p key={dailyData.daily.dt}>Day</p>;
-        })}
-    </div>
+    <>
+      <div>{day}</div>
+      <img
+        src={`${process.env.REACT_APP_ICON_URL}${props.weatherType}.png`}
+        alt={`${props.weatherDesc}`}
+      />
+      <div>
+        {Math.round(props.min)}
+        {"\u00b0"} {Math.round(props.max)}
+        {"\u00b0"}
+      </div>
+    </>
   );
 };
 export default Conditions;

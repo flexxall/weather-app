@@ -1,54 +1,76 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Conditions from "../Conditions/Conditions";
 
-const Forecast = () => {
-  const [data, setData] = useState({});
-  const [error, setError] = useState(null);
+import "./Forcast.css";
 
-  let lat = 38.984764;
-  let lon = -94.677658;
-  let key = "850b5e90b2da89a22d801ce5562cb9d8";
-  let units = "imperial";
-  let url = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&appid=${key}`;
+const Forecast = () => {
+  const [data, setData] = useState();
+
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_URL = process.env.REACT_APP_API_URL;
+  const lat = 38.984764;
+  const lon = -94.677658;
+  const exclude = "current,minutely,hourly,alerts";
+  const units = "imperial";
+  const url = `${API_URL}?lat=${lat}&lon=${lon}&exclude=${exclude}&units=${units}&appid=${API_KEY}`;
 
   useEffect(() => {
-    getForecast();
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        setData(
+          res.daily.map((day, i) => {
+            return {
+              weekDay: day.dt,
+              min: day.temp.min,
+              max: day.temp.max,
+              weatherType: day.weather[0].icon,
+              weatherDesc: day.weather[0].description,
+            };
+          })
+        );
+      });
   }, []);
 
-  async function getForecast() {
-    try {
-      const res = await axios(url);
-      // .then((res) => {
-      setData(res.data);
-      console.log(data);
-      // const daily = data.daily.map((day) => {
-      // return(<p key={data.daily.dt}>Day</p>));}
-      // })
-      // .catch((error) => {
-      //   console.error("Error fetching data: ", error);
-      //   setError(error);
-      // });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   return (
-    <div>
-      <h2>Find Current Weather Conditions</h2>
-      <div>{JSON.stringify(data)}</div>
-      {/* {data.daily.map((day) => {
-        return <p key={data.daily.dt}>Day</p>;
-      })} */}
-      {/* <ul>
-        {data.daily.map((day) => (
-          <li key={data.daily.dt}>Day</li>
-        ))}
-      </ul> */}
-      <button onClick={getForecast}>Get Forecast</button>
-      <Conditions data={data} />
-    </div>
+    <>
+      <div>
+        <h2>Current Weather Forcast For</h2>
+        <h2>
+          Latitude: {lat} Logitude: {lon}
+        </h2>
+      </div>
+      <div className="forcast">
+        {!!data &&
+          data.slice(0, 4).map((i, index) => {
+            if (index === 0) {
+              return (
+                <div className="today" key={index}>
+                  <Conditions
+                    weekDay={i.weekDay}
+                    min={i.min}
+                    max={i.max}
+                    weatherType={i.weatherType}
+                    weatherDesc={i.weatherDesc}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div className="singleDay" key={index}>
+                  <Conditions
+                    weekDay={i.weekDay}
+                    min={i.min}
+                    max={i.max}
+                    weatherType={i.weatherType}
+                    weatherDesc={i.weatherDesc}
+                  />
+                </div>
+              );
+            }
+          })}
+      </div>
+    </>
   );
 };
 

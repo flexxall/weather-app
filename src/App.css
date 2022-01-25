@@ -13,15 +13,6 @@
   color: white;
 }
 
-.today {
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-}
-
 main {
   flex-grow: 1;
   text-align: center;
